@@ -8,7 +8,6 @@
     const response = await invoke("get_all_network_adapters");
     adapters = JSON.parse(response);
   }
-
   onMount(async () => {
     getAdapters();
   });
@@ -42,16 +41,25 @@
   <h1>NetworkAdapterSwitcher</h1>
 </div>
 
-<div>
-  {#each adapters.sort((a, b) => a.Name.localeCompare(b.Name)) as adapter}
-    <div>
-      <h2>{adapter.Name}</h2>
-      <input
-        type="checkbox"
-        class="toggle"
-        on:change={async (e) => handleAdapterStatusChange(e, adapter.Name)}
-        checked={getAdapterStatus(adapter)}
-      />
-    </div>
-  {/each}
+{#if adapters.length === 0}
+  <div class="flex justify-center">
+    <span class="loading text-primary loading-dots loading-lg text-5xl"></span>
+  </div>
+{/if}
+<div class="flex justify-center mx-auto text-2xl text-white">
+  <div class="flex flex-col justify-center mx-auto">
+    {#each adapters.sort((a, b) => a.Name.localeCompare(b.Name)) as adapter}
+      <div>
+        <label class="label cursor-pointer">
+          <span class=" mr-2">{adapter.Name}</span>
+          <input
+            type="checkbox"
+            class="toggle toggle-primary"
+            on:change={async (e) => handleAdapterStatusChange(e, adapter.Name)}
+            checked={getAdapterStatus(adapter)}
+          />
+        </label>
+      </div>
+    {/each}
+  </div>
 </div>
